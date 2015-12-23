@@ -30,6 +30,30 @@ struct cuNode {
 	uint32_t p[4];
 };
 
+struct cuConfig {
+	uint32_t idx[4];
+};
+
+struct WSpace {
+	
+	cuNode ws[4];
+	
+	uint32_t matches(int rows) {
+		
+		if((rows<2)||(rows>4)) return 999999;
+		// parameter indicates number of rows to check
+		
+		uint32_t count = 0, *p, *q, *end;
+		// treat workspace as contiguous array of uint32_t
+		end = (uint32_t*)&(ws[rows-1].p[3]); // pointer to last value
+		
+		for(p = (uint32_t*)&(ws[0].p[0]); p < end; ++p)
+			for(q = p+1; q <= end; ++q) if(*p == *q) count += 1;
+		
+		return count;
+	}
+};	
+
 int main(int argc, char **argv)
 {
 	const uint32_t Target = 84;
@@ -77,9 +101,29 @@ int main(int argc, char **argv)
 	for(auto a = nodelist.begin(); a != nodelist.end(); ++a) {
 		std::cout << (*a).p[0] << "," << (*a).p[1] << "," << (*a).p[2] << "," << (*a).p[3] << std::endl;
 	}
-#endif
-
 	std::cout << "Found " << nodelist.size() << " nodes." << std::endl;
+#endif
+	// Establish a list of configurations for triples
+	
+	WSpace wspace;
+	std::vector<cuConfig> configs;
+	uint32_t count;
+	for(int a = 0; a < 10; ++a) {
+		wspace.ws[0] = nodelist[a];
+		for(int b = 0; b < 10; ++b) {
+			wspace.ws[1] = nodelist[b];
+			count = wspace.matches(2);
+			std::cout << count << std::endl;
+			for(int x=0;x<4;++x) std::cout << wspace.ws[0].p[x] << " ";
+			std::cout << std::endl;
+			for(int x=0;x<4;++x) std::cout << wspace.ws[1].p[x] << " ";
+			std::cout << std::endl;
+		}
+	}
+			
+			
+	
+	
 	return 0;
 }
 
