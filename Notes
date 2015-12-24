@@ -17,10 +17,27 @@
 	cuTocta *workspace;
 	cudaMallocManaged( &workspace, sizeof(cuTocta) );
 	
-5) 	std::vector<cuTocta> newresults
-	For each partial solution from a list of partials:
+4.5)	std::vector<cuNode> inputToctas;
+		std::vector<cuNode> outputToctas;
+		
+4.7)	Populate inputToctas with partial single row  solutions
+	
+5) 	
+	For each partial solution from inputToctas:
 		copy partial to workspace
 		call kernel code with appropriate parameters<<<nBlocks,nThreads>>>(nl_size)
-		if ((blockDim.x * blockIdx.x) + threadIdx.x) < nl_size { ... }
-		analyse results area and copy any new solutions to newresults
+			check2rows(nl_size) or check3rows(nl_size) or check4rows(nl_size)
+			if ((blockDim.x * blockIdx.x) + threadIdx.x) < nl_size { ... }
+		outputToctas.clear();
+		analyse results area and copy any new solutions to outputToctas
+		inputToctas = outputToctas;
+		# inputToctas now has list of pair solutions
+
+7)	Repeat to generate a list of triples
+
+8)	Repeat to generate a list of solutions
+
+9)	Publish/save solution list
+
+10)	Stop
 	
