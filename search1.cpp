@@ -25,12 +25,13 @@
 #include <iostream>
 #include <cstdint>
 #include <vector>
+#include <iomanip>
 
 struct cuNode {
 	uint32_t p[4];
 	
 	void print_cuNode() {
-		for(int x=0;x<4;++x) std::cout << p[x] << " ";
+		for(int x=0;x<4;++x) std::cout << std::setw(3) << p[x] << " ";
 		std::cout << std::endl;
 	}
 };
@@ -64,10 +65,10 @@ struct cuTocta {
 	bool col3_sum(uint32_t target) { return (target == (ws[0].p[3]+ws[1].p[3]+ws[2].p[3]+ws[3].p[3])); }
 		
 };	
-
+//======================================================================
 int main(int argc, char **argv)
 {
-	const uint32_t Target = 84;
+	const uint32_t Target = 90;
 	
 	std::vector<uint32_t> primes 
 	{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 
@@ -147,7 +148,7 @@ int main(int argc, char **argv)
 							wspace.ws[3] = nodelist[d];
 							count = wspace.matches(4);
 							if( (count==4) && (wspace.c1_quad()) && (wspace.col2_sum(Target) && (wspace.col3_sum(Target)) ) ) {
-								std::cout << count << std::endl;
+								std::cout << "Target:" << Target << std::endl;
 								wspace.ws[0].print_cuNode();
 								wspace.ws[1].print_cuNode();
 								wspace.ws[2].print_cuNode();
