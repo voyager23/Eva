@@ -60,6 +60,9 @@ struct cuTocta {
 	bool a1_pair() { return (ws[0].p[1] == ws[1].p[0]); }
 	bool b1_pair() { return (ws[1].p[1] == ws[2].p[0]); }
 	bool c1_quad() { return ((ws[2].p[1] == ws[3].p[0])&&(ws[3].p[1] == ws[0].p[0])); }
+	bool col2_sum(uint32_t target) { return (target == (ws[0].p[2]+ws[1].p[2]+ws[2].p[2]+ws[3].p[2])); }
+	bool col3_sum(uint32_t target) { return (target == (ws[0].p[3]+ws[1].p[3]+ws[2].p[3]+ws[3].p[3])); }
+		
 };	
 
 int main(int argc, char **argv)
@@ -128,15 +131,36 @@ int main(int argc, char **argv)
 				//std::cout << count << std::endl;
 				//wspace.ws[0].print_cuNode();
 				//wspace.ws[1].print_cuNode();
-				solutions+=1;
-				// ????add a further line to wspace and do triple search????
+				//solutions+=1;
+				// Do triple search with this result...
+				for(int c = 0; c < nl_size; ++c) {
+					wspace.ws[2] = nodelist[c];
+					count = wspace.matches(3);
+					if((count==2)&&(wspace.b1_pair())) {
+						//std::cout << count << std::endl;
+						//wspace.ws[0].print_cuNode();
+						//wspace.ws[1].print_cuNode();
+						//wspace.ws[2].print_cuNode();
+						//solutions+=1;
+						// Do final solution search with this result...
+						for(int d = 0; d < nl_size; ++d) {
+							wspace.ws[3] = nodelist[d];
+							count = wspace.matches(4);
+							if( (count==4) && (wspace.c1_quad()) && (wspace.col2_sum(Target) && (wspace.col3_sum(Target)) ) ) {
+								std::cout << count << std::endl;
+								wspace.ws[0].print_cuNode();
+								wspace.ws[1].print_cuNode();
+								wspace.ws[2].print_cuNode();
+								wspace.ws[3].print_cuNode();
+								solutions+=1;
+							}							
+						}
+					}
+				}
 			}
 		}
 	}
-	std::cout << "Pairs:" << solutions << std::endl;		
-			
-	
-	
+	std::cout << "Triples:" << solutions << std::endl;	
 	return 0;
 }
 
