@@ -26,7 +26,22 @@
 #include <cstdint>
 #include <vector>
 #include <iomanip>
+//----------------------------------------------------------------------
+std::vector<uint32_t> primes 
+{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 
+67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 
+139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 
+223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 
+293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 
+383, 389, 397, 401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 
+463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563, 
+569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631, 641, 643, 
+647, 653, 659, 661, 673, 677, 683, 691, 701, 709, 719, 727, 733, 739, 
+743, 751, 757, 761, 769, 773, 787, 797, 809, 811, 821, 823, 827, 829, 
+839, 853, 857, 859, 863, 877, 881, 883, 887, 907, 911, 919, 929, 937, 
+941, 947, 953, 967, 971, 977, 983, 991, 997, 1009, 1013, 1019, 1021};
 
+//----------------------------------------------------------------------
 struct cuNode {
 	uint32_t p[4];
 	
@@ -35,11 +50,11 @@ struct cuNode {
 		std::cout << std::endl;
 	}
 };
-
+//----------------------------------------------------------------------
 struct cuConfig {
 	uint32_t idx[4];
 };
-
+//----------------------------------------------------------------------
 struct cuTocta {
 	
 	cuNode ws[4];
@@ -58,32 +73,24 @@ struct cuTocta {
 		
 		return count;
 	}
+	
 	bool a1_pair() { return (ws[0].p[1] == ws[1].p[0]); }
+	
 	bool b1_pair() { return (ws[1].p[1] == ws[2].p[0]); }
+	
 	bool c1_quad() { return ((ws[2].p[1] == ws[3].p[0])&&(ws[3].p[1] == ws[0].p[0])); }
+	
 	bool col2_sum(uint32_t target) { return (target == (ws[0].p[2]+ws[1].p[2]+ws[2].p[2]+ws[3].p[2])); }
+	
 	bool col3_sum(uint32_t target) { return (target == (ws[0].p[3]+ws[1].p[3]+ws[2].p[3]+ws[3].p[3])); }
 		
 };	
 //======================================================================
 int main(int argc, char **argv)
 {
-	const uint32_t Target = 90;
+	const uint32_t Target = 84;
 	
-	std::vector<uint32_t> primes 
-	{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 
-	67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 
-	139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 
-	223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 
-	293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 
-	383, 389, 397, 401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 
-	463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563, 
-	569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631, 641, 643, 
-	647, 653, 659, 661, 673, 677, 683, 691, 701, 709, 719, 727, 733, 739, 
-	743, 751, 757, 761, 769, 773, 787, 797, 809, 811, 821, 823, 827, 829, 
-	839, 853, 857, 859, 863, 877, 881, 883, 887, 907, 911, 919, 929, 937, 
-	941, 947, 953, 967, 971, 977, 983, 991, 997, 1009, 1013, 1019, 1021};
-	
+	// list primes up to target - 10
 	std::vector<uint32_t> primelist;
 	for(auto a = primes.begin(); a != primes.end(); ++a) {
 		if(*a < (Target-10)) {
@@ -93,6 +100,7 @@ int main(int argc, char **argv)
 		}
 	}
 	
+	// generate the nodelist
 	std::vector<cuNode> nodelist;
 	for(auto a = primelist.begin(); a != primelist.end(); ++a) {
 		for(auto b = primelist.begin(); b != primelist.end(); ++b) {
@@ -108,13 +116,6 @@ int main(int argc, char **argv)
 			}
 		}
 	}
-	
-#if(0)	
-	for(auto a = nodelist.begin(); a != nodelist.end(); ++a) {
-		std::cout << (*a).p[0] << "," << (*a).p[1] << "," << (*a).p[2] << "," << (*a).p[3] << std::endl;
-	}
-	std::cout << "Found " << nodelist.size() << " nodes." << std::endl;
-#endif
 
 	// Establish a list of configurations for triples
 	
@@ -133,6 +134,7 @@ int main(int argc, char **argv)
 				//wspace.ws[0].print_cuNode();
 				//wspace.ws[1].print_cuNode();
 				//solutions+=1;
+				
 				// Do triple search with this result...
 				for(int c = 0; c < nl_size; ++c) {
 					wspace.ws[2] = nodelist[c];
@@ -143,25 +145,28 @@ int main(int argc, char **argv)
 						//wspace.ws[1].print_cuNode();
 						//wspace.ws[2].print_cuNode();
 						//solutions+=1;
+						
 						// Do final solution search with this result...
 						for(int d = 0; d < nl_size; ++d) {
 							wspace.ws[3] = nodelist[d];
 							count = wspace.matches(4);
 							if( (count==4) && (wspace.c1_quad()) && (wspace.col2_sum(Target) && (wspace.col3_sum(Target)) ) ) {
-								std::cout << "Target:" << Target << std::endl;
-								wspace.ws[0].print_cuNode();
-								wspace.ws[1].print_cuNode();
-								wspace.ws[2].print_cuNode();
-								wspace.ws[3].print_cuNode();
+								//std::cout << "Target:" << Target << std::endl;
+								//wspace.ws[0].print_cuNode();
+								//wspace.ws[1].print_cuNode();
+								//wspace.ws[2].print_cuNode();
+								//wspace.ws[3].print_cuNode();
 								solutions+=1;
 							}							
-						}
+						} // for d
 					}
-				}
+				} // for c
 			}
-		}
+		} // for b
 	}
-	std::cout << "Triples:" << solutions << std::endl;	
+	
+	std::cout << "Solutions:" << solutions << std::endl;	
+	std::cout << "Nodelist size:" << nl_size << std::endl;	
 	return 0;
 }
 

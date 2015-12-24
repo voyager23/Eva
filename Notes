@@ -1,0 +1,26 @@
+# This is the Notes text file
+=============================
+
+1) Generate the nodelist for the given target
+
+2) cuNode *nl;
+	cudaMallocManaged( &nl, sizeof(cuNode) * nodelist.size() );
+	for(int x = 0; x < nodelist.size(); +=x) *(nl+x) = nodelist[x];
+	Given nThreads = 1024;
+	nBlocks = (nodelist.size + nThreads - 1) / nThreads
+	
+3) Allocate a results area
+	uint8_t *Results;
+	cudaMallocManaged( &Results, sizeof(uint8_t) * nodelist.size() );
+	
+4) Allocate a workspace (cuTocta)
+	cuTocta *workspace;
+	cudaMallocManaged( &workspace, sizeof(cuTocta) );
+	
+5) 	std::vector<cuTocta> newresults
+	For each partial solution from a list of partials:
+		copy partial to workspace
+		call kernel code with appropriate parameters<<<nBlocks,nThreads>>>(nl_size)
+		if ((blockDim.x * blockIdx.x) + threadIdx.x) < nl_size { ... }
+		analyse results area and copy any new solutions to newresults
+	
