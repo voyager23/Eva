@@ -28,13 +28,18 @@
 
 struct cuNode {
 	uint32_t p[4];
+	
+	void print_cuNode() {
+		for(int x=0;x<4;++x) std::cout << p[x] << " ";
+		std::cout << std::endl;
+	}
 };
 
 struct cuConfig {
 	uint32_t idx[4];
 };
 
-struct WSpace {
+struct cuTocta {
 	
 	cuNode ws[4];
 	
@@ -52,6 +57,9 @@ struct WSpace {
 		
 		return count;
 	}
+	bool a1_pair() { return (ws[0].p[1] == ws[1].p[0]); }
+	bool b1_pair() { return (ws[1].p[1] == ws[2].p[0]); }
+	bool c1_quad() { return ((ws[2].p[1] == ws[3].p[0])&&(ws[3].p[1] == ws[0].p[0])); }
 };	
 
 int main(int argc, char **argv)
@@ -103,24 +111,29 @@ int main(int argc, char **argv)
 	}
 	std::cout << "Found " << nodelist.size() << " nodes." << std::endl;
 #endif
+
 	// Establish a list of configurations for triples
 	
-	WSpace wspace;
+	cuTocta wspace;
 	std::vector<cuConfig> configs;
-	uint32_t count;
-	for(int a = 0; a < 10; ++a) {
+	uint32_t count, solutions=0;
+	uint32_t nl_size = nodelist.size();
+	for(int a = 0; a < nl_size; ++a) {
 		wspace.ws[0] = nodelist[a];
-		for(int b = 0; b < 10; ++b) {
+		for(int b = 0; b < nl_size; ++b) {
 			wspace.ws[1] = nodelist[b];
 			count = wspace.matches(2);
-			std::cout << count << std::endl;
-			for(int x=0;x<4;++x) std::cout << wspace.ws[0].p[x] << " ";
-			std::cout << std::endl;
-			for(int x=0;x<4;++x) std::cout << wspace.ws[1].p[x] << " ";
-			std::cout << std::endl;
+			// just checking...
+			if((count==1)&&wspace.a1_pair()) {
+				//std::cout << count << std::endl;
+				//wspace.ws[0].print_cuNode();
+				//wspace.ws[1].print_cuNode();
+				solutions+=1;
+				// ????add a further line to wspace and do triple search????
+			}
 		}
 	}
-			
+	std::cout << "Pairs:" << solutions << std::endl;		
 			
 	
 	
