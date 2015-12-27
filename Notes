@@ -44,4 +44,44 @@
 
 20) Compute environment AWS/EC2 g2.2xlarge $0.65/hr
 	
+
+30) Apply qsort and bsearch to nodelist.
+
+	// generic compare function
+	int compareNode(const void *a, const void *b) {
+		if ( *(cuNode*)a < *(cuNode*)b ) return -1;
+		if ( *(cuNode*)a == *(cuNode*)b ) return 0;
+		if ( *(cuNode*)a > *(cuNode*)b ) return 1;
+	}
+	
+	// compare first two primes.
+	int compare2primes(const void *a, const void *b) {
+		cuNode l = *(cuNode*)a;
+		cuNode r = *(cuNode*)b;
+		if ( l.p[0] < r.p[0] ) return -1;
+		if ( l.p[0] > r.p[0] ) return  1;
+		// first entries equal
+		if ( l.p[1] < r.p[1] ) return -1;
+		if ( l.p[1] > r.p[1] ) return  1;
+		// first 2 entries equal
+		return 0;
+	}
+	
+	// compare first three primes.
+	int compare3primes(const void *a, const void *b) {
+		cuNode l = *(cuNode*)a;
+		cuNode r = *(cuNode*)b;
+		if ( l.p[0] < r.p[0] ) return -1;
+		if ( l.p[0] > r.p[0] ) return  1;
+		// first entries equal
+		if ( l.p[1] < r.p[1] ) return -1;
+		if ( l.p[1] > r.p[1] ) return  1;
+		// first 2 entries equal
+		if ( l.p[2] < r.p[2] ) return -1;
+		if ( l.p[2] > r.p[2] ) return  1;
+		// first 3 entries equal
+		return 0;
+	}		
+		
+	
 	
