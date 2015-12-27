@@ -26,6 +26,8 @@
 #include <cstdint>
 #include <vector>
 #include <iomanip>
+#include <algorithm>
+
 //----------------------------------------------------------------------
 std::vector<uint32_t> primes 
 {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 
@@ -50,6 +52,51 @@ struct cuNode {
 		std::cout << std::endl;
 	}
 };
+
+// compare first two primes.
+bool compare2primes(cuNode l, cuNode r) {
+		// return TRUE if left comes before right
+	if ( l.p[0] < r.p[0] ) return true;
+	if ( l.p[0] > r.p[0] ) return false;
+	// first entries equal
+	if ( l.p[1] < r.p[1] ) return true;
+	if ( l.p[1] > r.p[1] ) return  false;
+	// first 2 entries equal
+	return false;
+}
+
+// compare first three primes.
+bool compare3primes(cuNode l, cuNode r) {
+	// return TRUE if left comes before right
+	if ( l.p[0] < r.p[0] ) return true;
+	if ( l.p[0] > r.p[0] ) return false;
+	// first entries equal
+	if ( l.p[1] < r.p[1] ) return true;
+	if ( l.p[1] > r.p[1] ) return false;
+	// first 2 entries equal
+	if ( l.p[2] < r.p[2] ) return true;
+	if ( l.p[2] > r.p[2] ) return false;
+	// first 3 entries equal
+	return false;
+}
+	
+bool compare4primes(cuNode l, cuNode r) {
+	// Called by sort routine.
+	// return TRUE if left comes before right
+	if ( l.p[0] < r.p[0] ) return true;
+	if ( l.p[0] > r.p[0] ) return false;
+	// first entries equal
+	if ( l.p[1] < r.p[1] ) return true;
+	if ( l.p[1] > r.p[1] ) return false;
+	// first 2 entries equal
+	if ( l.p[2] < r.p[2] ) return true;
+	if ( l.p[2] > r.p[2] ) return false;
+	// first 3 entries equal
+	if ( l.p[3] < r.p[3] ) return true;
+	if ( l.p[3] > r.p[3] ) return false;
+	return false;
+}
+
 //----------------------------------------------------------------------
 struct cuConfig {
 	uint32_t idx[4];
@@ -116,6 +163,14 @@ int main(int argc, char **argv)
 			}
 		}
 	}
+	// Sort the nodelist into ascending order. We can then search
+	// the nodelist for full or partial matches
+	std::cout << "Starting sort...";
+	std::sort(nodelist.begin(), nodelist.end(), compare4primes);
+	std::cout << "complete. Starting search...";
+	cuNode findme = {0,0,0,0};
+	bool foundit = std::binary_search(nodelist.begin(), nodelist.end(), findme, compare4primes);
+	std::cout << "search returned " << foundit << std::endl; 
 
 	// Establish a list of configurations for triples
 	
@@ -128,8 +183,10 @@ int main(int argc, char **argv)
 		for(int b = 0; b < nl_size; ++b) {
 			wspace.ws[1] = nodelist[b];
 			count = wspace.matches(2);
+			cuNode column2 = { wspace.ws[0].p[2], wspace.ws[1].p[2], 0, 0 };
+			cuNode column3 = { wspace.ws[0].p[3], wspace.ws[1].p[3], 0, 0 };
 			// just checking...
-			if((count==1)&&wspace.a1_pair()) {
+			if((count==1)&&wspace.a1_pair()&&std::binary_search(nodelist.begin(), nodelist.end(), column2, compare2primes)) {
 				//std::cout << count << std::endl;
 				//wspace.ws[0].print_cuNode();
 				//wspace.ws[1].print_cuNode();

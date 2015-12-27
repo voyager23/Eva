@@ -81,7 +81,25 @@
 		if ( l.p[2] > r.p[2] ) return  1;
 		// first 3 entries equal
 		return 0;
-	}		
+	}
+	
+	// compare all primes.
+	int compare4primes(const void *a, const void *b) {
+		cuNode l = *(cuNode*)a;
+		cuNode r = *(cuNode*)b;
+		if ( l.p[0] < r.p[0] ) return -1;
+		if ( l.p[0] > r.p[0] ) return  1;
+		// first entries equal
+		if ( l.p[1] < r.p[1] ) return -1;
+		if ( l.p[1] > r.p[1] ) return  1;
+		// first 2 entries equal
+		if ( l.p[2] < r.p[2] ) return -1;
+		if ( l.p[2] > r.p[2] ) return  1;
+		// first 3 entries equal
+		if ( l.p[3] < r.p[3] ) return -1;
+		if ( l.p[3] > r.p[3] ) return  1;
+		return 0;
+	}
 		
 	
 	
