@@ -132,10 +132,15 @@ struct cuTocta {
 	bool col3_sum(uint32_t target) { return (target == (ws[0].p[3]+ws[1].p[3]+ws[2].p[3]+ws[3].p[3])); }
 		
 };	
+
+#define Verbose 1	
+
 //======================================================================
 int main(int argc, char **argv)
 {
 	const uint32_t Target = 84;
+	
+
 	
 	// list primes up to target - 10
 	std::vector<uint32_t> primelist;
@@ -208,11 +213,13 @@ int main(int argc, char **argv)
 							wspace.ws[3] = nodelist[d];
 							count = wspace.matches(4);
 							if( (count==4) && (wspace.c1_quad()) && (wspace.col2_sum(Target) && (wspace.col3_sum(Target)) ) ) {
-								//std::cout << "Target:" << Target << std::endl;
-								//wspace.ws[0].print_cuNode();
-								//wspace.ws[1].print_cuNode();
-								//wspace.ws[2].print_cuNode();
-								//wspace.ws[3].print_cuNode();
+								if(Verbose==1) {
+									std::cout << "Target:" << Target << std::endl;
+									wspace.ws[0].print_cuNode();
+									wspace.ws[1].print_cuNode();
+									wspace.ws[2].print_cuNode();
+									wspace.ws[3].print_cuNode();
+								}
 								solutions+=1;
 							}							
 						} // for d
@@ -222,7 +229,7 @@ int main(int argc, char **argv)
 		} // for b
 	}
 	
-	std::cout << "Solutions:" << solutions << std::endl;	
+	std::cout << "\nSolutions:" << solutions << std::endl;	
 	std::cout << "Nodelist size:" << nl_size << std::endl;	
 	return 0;
 }
